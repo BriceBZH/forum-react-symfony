@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </head>
+    <body>
+        {% block header %}
+        <header class="header"> 
+            <h1>Forum React/Symfony</h1>
+            <nav id="nav">
+                <menu>
+                    <li><a href="{{ path('index') }}">Accueil</a></li>
+                    <li><a href="">Rechercher</a></li>
+                    <li><a href="">Membres</a></li>
+                    {% if app.user is null %}
+                        <li><a href="">Messagerie</a></li>
+                    {% endif %}
+                    {% if app.user is not null %}
+                        {% if 'ROLE_USER' in app.user.roles %}
+                            <li><a href="{{ path('profile', {idUser: app.user.id}) }}">Profile</a></li>
+                        {% endif %}
+                        {% if 'ROLE_ADMIN' in app.user.roles %}
+                            <li><a href="{{ path('admin') }}">Admin</a></li>
+                        {% endif %}
+                        {% if app.user.userIdentifier is defined %} 
+                            <li><a href="">Deconnexion</a></li>
+                        {% endif %}
+                    {% endif %}
+                </menu>
+            </nav>
+        </header>
+    {% endblock %}
+        {% block body %}{% endblock %}
+        {{ encore_entry_script_tags('app') }}
+    </body>
+</html>
