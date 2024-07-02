@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'users')]
@@ -31,10 +32,16 @@ class User
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(targetEntity: Thread::class, mappedBy: 'user')]
+    /**
+     * @ORM\OneToMany(targetEntity=Thread::class, mappedBy="user")
+     * @Groups({"user:read"})
+     */
     private Collection $threads;
 
-    #[ORM\OneToMany(targetEntity: Post::class, mappedBy: 'user')]
+    /**
+     * @ORM\OneToMany(targetEntity=Post::class, mappedBy="user")
+     * @Groups({"user:read"})
+     */
     private Collection $posts;
 
     public function __construct()
@@ -46,13 +53,6 @@ class User
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getUsername(): ?string
@@ -123,55 +123,11 @@ class User
         return $this->threads;
     }
 
-    public function addThread(Thread $thread): static
-    {
-        if (!$this->threads->contains($thread)) {
-            $this->threads->add($thread);
-            $thread->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeThread(Thread $thread): static
-    {
-        if ($this->threads->removeElement($thread)) {
-            // set the owning side to null (unless already changed)
-            if ($thread->getUser() === $this) {
-                $thread->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Post>
      */
     public function getPosts(): Collection
     {
         return $this->posts;
-    }
-
-    public function addPost(Post $post): static
-    {
-        if (!$this->posts->contains($post)) {
-            $this->posts->add($post);
-            $post->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removePost(Post $post): static
-    {
-        if ($this->posts->removeElement($post)) {
-            // set the owning side to null (unless already changed)
-            if ($post->getUser() === $this) {
-                $post->setUser(null);
-            }
-        }
-
-        return $this;
     }
 }

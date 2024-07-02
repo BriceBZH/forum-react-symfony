@@ -8,38 +8,17 @@
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
+        
     </head>
     <body>
         {% block header %}
         <header class="header"> 
             <h1>Forum React/Symfony</h1>
-            <nav id="nav">
-                <menu>
-                    <li><a href="{{ path('index') }}">Accueil</a></li>
-                    <li><a href="">Rechercher</a></li>
-                    <li><a href="">Membres</a></li>
-                    {% if app.user is null %}
-                        <li><a href="">Messagerie</a></li>
-                    {% endif %}
-                    {% if app.user is not null %}
-                        {% if 'ROLE_USER' in app.user.roles %}
-                            <li><a href="{{ path('profile', {idUser: app.user.id}) }}">Profile</a></li>
-                        {% endif %}
-                        {% if 'ROLE_ADMIN' in app.user.roles %}
-                            <li><a href="{{ path('admin') }}">Admin</a></li>
-                        {% endif %}
-                        {% if app.user.userIdentifier is defined %} 
-                            <li><a href="">Deconnexion</a></li>
-                        {% endif %}
-                    {% endif %}
-                </menu>
-            </nav>
         </header>
     {% endblock %}
         {% block body %}{% endblock %}
-        {{ encore_entry_script_tags('app') }}
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
     </body>
 </html>

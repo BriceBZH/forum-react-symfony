@@ -6,6 +6,7 @@ use App\Repository\SectionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SectionRepository::class)]
 #[ORM\Table(name: 'sections')]
@@ -22,7 +23,10 @@ class Section
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'section')]
+    /**
+     * @ORM\OneToMany(targetEntity=Category::class, mappedBy="section")
+     * @Groups({"section:read"})
+     */
     private Collection $categories;
 
     public function __construct()
