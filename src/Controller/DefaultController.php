@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\SectionRepository;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class DefaultController extends AbstractController
 {
@@ -17,10 +18,13 @@ class DefaultController extends AbstractController
     }
 
     #[Route('/sections', name: 'sections')]
-    public function sections(SectionRepository $sectionRepository): JsonResponse
+    public function sections(SectionRepository $sectionRepository, SerializerInterface $serializer): JsonResponse
     {
-        return $this->json([
-            'sections' => $sectionRepository->findAll(),
-        ]);
+        $sections = $sectionRepository->findAll();
+        $jsonSections = $serializer->serialize($sections, 'json', ['groups' => 'section:read']);
+        $data = [
+            'sections' => json_decode($jsonSections, true)
+        ];
+        return new JsonResponse($data, 200);
     }
 }

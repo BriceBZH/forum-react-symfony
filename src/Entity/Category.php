@@ -15,22 +15,24 @@ class Category
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['section:read', 'category:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'categories')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['category:read'])]
     private ?Section $section = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['section:read', 'category:read'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['section:read', 'category:read'])]
     private ?string $description = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Thread::class, mappedBy="category")
-     * @Groups({"category:read"})
-     */
+    #[ORM\OneToMany(targetEntity: Thread::class, mappedBy: 'category')]
+    #[Groups(['category:read'])]
     private Collection $threads;
 
     public function __construct()

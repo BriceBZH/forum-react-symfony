@@ -15,18 +15,19 @@ class Section
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['section:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['section:read'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['section:read'])]
     private ?string $description = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Category::class, mappedBy="section")
-     * @Groups({"section:read"})
-     */
+    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'section')]
+    #[Groups(['section:read'])]
     private Collection $categories;
 
     public function __construct()
@@ -84,7 +85,6 @@ class Section
     public function removeCategory(Category $category): static
     {
         if ($this->categories->removeElement($category)) {
-            // set the owning side to null (unless already changed)
             if ($category->getSection() === $this) {
                 $category->setSection(null);
             }
