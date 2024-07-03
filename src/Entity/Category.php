@@ -20,7 +20,6 @@ class Category
 
     #[ORM\ManyToOne(inversedBy: 'categories')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['category:read'])]
     private ?Section $section = null;
 
     #[ORM\Column(length: 255)]

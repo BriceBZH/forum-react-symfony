@@ -6,6 +6,7 @@ use App\Repository\ThreadRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ThreadRepository::class)]
 #[ORM\Table(name: 'threads')]
@@ -14,26 +15,32 @@ class Thread
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['category:read', 'thread:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'threads')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['thread:read'])]
     private ?Category $category = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['category:read', 'thread:read'])]
     private ?string $title = null;
 
     #[ORM\ManyToOne(inversedBy: 'threads')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['category:read', 'thread:read'])]
     private ?User $user = null;
 
     #[ORM\Column]
+    #[Groups(['category:read', 'thread:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Groups(['category:read', 'thread:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToMany(targetEntity: Post::class, mappedBy: 'thread')]
+    #[Groups(['category:read', 'thread:read'])]
     private Collection $posts;
 
     public function __construct()

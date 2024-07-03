@@ -21,10 +21,11 @@ class DefaultController extends AbstractController
     public function sections(SectionRepository $sectionRepository, SerializerInterface $serializer): JsonResponse
     {
         $sections = $sectionRepository->findAll();
-        $jsonSections = $serializer->serialize($sections, 'json', ['groups' => 'section:read']);
+        $jsonSections = $serializer->serialize($sections, 'json', ['groups' => ['section:read', 'category:read']]);
         $data = [
             'sections' => json_decode($jsonSections, true)
         ];
+        
         return new JsonResponse($data, 200);
     }
 }

@@ -70,10 +70,17 @@ const Home = () => {
                                 <td>{section.description}</td>
                             </tr>
                             {section.categories.map(category => (
+                                <React.Fragment>
                                 <tr key={category.id}>
                                     <td>{category.title}</td>
                                     <td>{category.description}</td>
                                 </tr>
+                                {category.threads.map(thread => (
+                                    <tr key={thread.id}>
+                                        <td>{thread.title}</td>
+                                    </tr>
+                                ))}
+                                </React.Fragment>
                             ))}
                         </React.Fragment>
                     ))}
